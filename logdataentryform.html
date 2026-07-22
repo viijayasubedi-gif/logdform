@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forestry Data Entry Form</title>
+    <style>
+        :root { --primary: #4d662b; --bg: #f4f6f1; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); margin: 0; padding: 5px 15px 15px 15px; display: flex; flex-direction: column; align-items: center; }
+        .container { background: #ffffff; max-width: 400px; width: 100%; padding: 8px 15px 15px 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.30); border-top: 5px solid var(--primary); box-sizing: border-box; }
+        h2 { color: var(--primary); margin-top: 0; text-align: center; border-bottom: 0px solid var(--primary); padding-bottom: 0px;font-size: 16px;}
+        .form-group { margin-bottom: 3px;display: flex; align-items: center; gap: 4px; }
+        label { font-weight: 600; color: #333; font-size: 12px; white-space: nowrap; width: 100px;}
+        input[type="text"], input[type="number"] { flex: 1; min-width: 0; padding: 3px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 12px; }
+        .row { display: flex; flex-direction: column; gap: 0;}
+        .col { flex: 1; min-width: 0; }
+        .btn { display: block; width: 100%; padding: 5px; font-size: 11px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; margin-top: 5px; text-align: center; text-transform: uppercase; }
+        .btn-submit { background-color: var(--primary); color: white; }
+        .btn-export { background-color: #0078d4; color: white; }
+        .counter { text-align: center; font-weight: bold; margin: -4px 0px 2px 0; color: #333; background: #d4edda; padding: 4px; border-radius: 4px; font-size: 11px; }
+        .preview-box { width: 100%; height: 40px; margin-top: 5px; font-family: monospace; font-size: 10px; padding: 5px; border: 1px solid #ccc; background: #fafafa; box-sizing: border-box; resize: none; }
+        @media (max-width: 480px) { .row { flex-direction: column; gap: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🌲 Log Detail-Data Entry</h2>
+    
+    <div id="entryCounter" class="counter">Total Records: 0</div>
+
+    <form id="forestForm" onsubmit="return false;">
+        <div class="row">
+            <div class="form-group col"><label>Forest</label><input type="text" id="forest" placeholder="e.g., CF/BAD/RA/01/01"></div>
+            <div class="form-group col"><label>Plot</label><input type="text" id="plot" placeholder="e.g., C1S1"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>MDate</label><input type="text" id="mdate" placeholder="e.g., 2081/06/20q"></div>
+            <div class="form-group col"><label>Fiscal Year</label><input type="text" id="fyear" placeholder="e.g., 2081/082"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>LogSn</label><input type="number" id="logsn" placeholder="e.g., 1"></div>
+            <div class="form-group col"><label>Chhapan</label><input type="number" id="chhapan" placeholder="e.g., 1"></div>
+            <div class="form-group col"><label>TN</label><input type="number" id="tn" placeholder="e.g., 450"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>Species</label><input type="text" id="spp" placeholder="e.g., Sal"></div>
+            <div class="form-group col"><label>Logn</label><input type="number" id="logn" placeholder="e.g., 1"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>SizeL</label><input type="number" id="sizel" step="any" placeholder="e.g., 10"></div>
+            <div class="form-group col"><label>SizeG</label><input type="number" id="sizeg" step="any" placeholder="e.g., 54"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>Hl</label><input type="number" id="hl" step="any" placeholder="e.g., 10"></div>
+            <div class="form-group col"><label>Hd1</label><input type="number" id="hd1" step="any" placeholder="e.g., 6"></div>
+            <div class="form-group col"><label>Hd2</label><input type="number" id="hd2" step="any" placeholder="e.g., 4"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>Pile</label><input type="number" id="pile" placeholder="e.g., 1"></div>
+            <div class="form-group col"><label>Type</label><input type="text" id="type" placeholder="e.g., RF"></div>
+            <div class="form-group col"><label>Share</label><input type="text" id="share" placeholder="e.g., LUI"></div>
+        </div>
+        <div class="row">
+            <div class="form-group col"><label>EG</label><input type="text" id="eg" placeholder="e.g., 1"></div>
+            <div class="form-group col"><label>Re</label><input type="text" id="re" placeholder="e.g., Top broken"></div>
+        </div>
+      
+<div class="form-group col" style="background:#f9fbf7; border:1px dashed var(--primary); padding:4px; border-radius:4px; display: flex; justify-content: flex-start; gap: 5px;">
+    <label for="photoFile" style="width: auto; min-width: 70px;">📸 Photo</label>
+    <input type="file" id="photoFile" accept="image/*" capture="environment">
+</div>
+
+
+ <button type="button" class="btn btn-submit" id="saveBtn">💾 Save Record</button>
+    </form>
+    <label style="margin-top:5px; font-weight:bold; display:block;">Current Batch Data Preview:</label>
+    <textarea id="dataPreview" class="preview-box" readonly placeholder="No data saved in this batch yet."></textarea>
+    <button type="button" class="btn btn-export" id="exportBtn">📤 Export all-CSV</button>
+</div>
+<script>
+    // 1. Initial configuration and safe startup initialization
+    const headers = ["Forest", "Plot", "MDate", "FYear", "LogSn", "Chhapan", "TN", "Spp", "Logn", "SizeL", "SizeG", "Hl", "Hd1", "Hd2", "Pile", "Type", "Share", "EG", "Re", "PhotoLink", "Tstamp"];
+    let runtimeRecords = [];
+
+    // Safely parse existing items from local browser memory on page boot
+    try {
+        const storedData = localStorage.getItem('forestry_batch_data');
+        if (storedData) {
+            runtimeRecords = JSON.parse(storedData) || [];
+        }
+    } catch (e) {
+        console.error("Could not read local storage records:", e);
+        runtimeRecords = [];
+    }
+
+    // Function to calculate and apply the next increment values
+    function applyAutoIncrements() {
+        let nextIndex = runtimeRecords.length + 1;
+        
+        let logsnField = document.getElementById('logsn');
+        let lognField = document.getElementById('logn');
+        
+        if (logsnField) logsnField.value = nextIndex;
+        if (lognField) lognField.value = nextIndex;
+    }
+
+    // 2. Window Onload: Refresh the preview box, record counter, and set initial auto-increment values
+    window.onload = function() {
+        if(runtimeRecords && runtimeRecords.length > 0) {
+            document.getElementById('entryCounter').innerHTML = "Total Records: " + runtimeRecords.length;
+            let displayLines = [];
+            for(let i = 0; i < runtimeRecords.length; i++) {
+                displayLines.push("Forest: " + runtimeRecords[i].Forest + " | Log: " + runtimeRecords[i].Logn);
+            }
+            document.getElementById('dataPreview').value = displayLines.join("\n");
+        }
+        applyAutoIncrements(); // Sets LogSn and Logn to 1 (or next number) on page load
+    };
+
+    // 3. Save Record Button Functionality (with custom validation)
+    document.getElementById('saveBtn').onclick = function() {
+        // Define all required field IDs and their user-friendly display names
+        const requiredFields = [
+            { id: 'forest', name: 'Forest' },
+            { id: 'plot', name: 'Plot' },
+            { id: 'mdate', name: 'MDate' },
+            { id: 'fyear', name: 'Fiscal Year' },
+            { id: 'logsn', name: 'LogSn' },
+            { id: 'chhapan', name: 'Chhapan' },
+            { id: 'tn', name: 'TN' },
+            { id: 'spp', name: 'Species' },
+            { id: 'logn', name: 'Logn' },
+            { id: 'sizel', name: 'SizeL' },
+            { id: 'sizeg', name: 'SizeG' },
+            { id: 'hl', name: 'Hl' },
+            { id: 'hd1', name: 'Hd1' },
+            { id: 'hd2', name: 'Hd2' },
+            { id: 'type', name: 'Type' }
+        ];
+
+        // Loop through required fields and evaluate validation rules
+        for (let i = 0; i < requiredFields.length; i++) {
+            let field = document.getElementById(requiredFields[i].id);
+            if (!field || !field.value.toString().trim()) {
+                alert("⚠️ Please enter the " + requiredFields[i].name + " field!");
+                if (field) field.focus();
+                return; // Blocks execution completely
+            }
+        }
+
+        // --- ACTUAL SAVE LOGIC ---
+        let newRecord = {};
+        headers.forEach(h => {
+            let elId = h.toLowerCase();
+            if (elId === 'fyear') elId = 'fyear'; // Match your html id mappings
+            
+            // Explicitly intercept PhotoLink to extract the camera image file name cleanly on mobile
+            if (h === 'PhotoLink') {
+                let fileInput = document.getElementById('photoFile');
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    newRecord[h] = fileInput.files[0].name; // Fix: Reads index [0] to extract filename properly
+                } else {
+                    newRecord[h] = ""; 
+                }
+            } else if (elId === 'photohtml') {
+                newRecord[h] = ""; 
+            } else if (elId === 'tstamp') {
+                newRecord[h] = new Date().toLocaleString();
+            } else {
+                let element = document.getElementById(elId);
+                newRecord[h] = element ? element.value.trim() : "";
+            }
+        });
+
+        // Push new item into current memory array
+        runtimeRecords.push(newRecord);
+
+        // Commit updating memory string to local storage cache database
+        try {
+            localStorage.setItem('forestry_batch_data', JSON.stringify(runtimeRecords));
+        } catch(e) {
+            console.error("Local storage update error", e);
+        }
+
+        // Update real-time counter metrics UI element metrics
+        document.getElementById('entryCounter').innerHTML = "Total Records: " + runtimeRecords.length;
+
+        // Repopulate and update text tracking array area UI logs view pane
+        let displayLines = [];
+        for(let i = 0; i < runtimeRecords.length; i++) {
+            displayLines.push("Forest: " + runtimeRecords[i].Forest + " | Log: " + runtimeRecords[i].Logn);
+        }
+        document.getElementById('dataPreview').value = displayLines.join("\n");
+
+        // Clear ONLY log-specific changing values (Size dimensions, EG, Remarks, Photo)
+        // Forest, Plot, MDate, FYear, Chhapan, TN, Spp, Pile, Type, Share are retained!
+        const clearTargets = ['sizel', 'sizeg', 'hl', 'hd1', 'hd2', 'eg', 're', 'photoFile'];
+        clearTargets.forEach(id => {
+            let inputEl = document.getElementById(id);
+            if(inputEl) inputEl.value = "";
+        });
+
+        // Automatically calculate and inject the NEXT increment value into LogSn and Logn
+        applyAutoIncrements();
+
+        // Focus cursor straight to SizeL for immediate, seamless measurement logging
+        let nextFocus = document.getElementById('sizel');
+        if(nextFocus) nextFocus.focus();
+    };
+
+           // 4. Export CSV button mapping framework with dynamic LogD_DateTime naming
+    document.getElementById('exportBtn').onclick = function() {
+        if(runtimeRecords.length === 0) {
+            alert("⚠️ No records found to export!");
+            return;
+        }
+        
+        // Step 1: Prompt user for explicit confirmation before doing anything
+        let clearMemory = confirm("📥 Export Data Batch?\n\nClicking OK will export your CSV file and safely CLEAR all temporary data from your browser memory.");
+        
+        if (!clearMemory) {
+            return; 
+        }
+
+        // Step 2: Dynamically calculate today's date and precise time strings (Format: YYYYMMDD_HHMMSS)
+        let today = new Date();
+        let year = today.getFullYear();
+        let month = String(today.getMonth() + 1).padStart(2, '0');
+        let day = String(today.getDate()).padStart(2, '0');
+        
+        let hours = String(today.getHours()).padStart(2, '0');
+        let minutes = String(today.getMinutes()).padStart(2, '0');
+        let seconds = String(today.getSeconds()).padStart(2, '0');
+        
+        // Assembles a completely unique filename for every single download export
+        let dynamicFileName = "LogD_" + year + month + day + "_" + hours + minutes + seconds + ".csv";
+
+        // Step 3: Generate and download the CSV data file safely
+        let csvContent = "data:text/csv;charset=utf-8," 
+            + headers.join(",") + "\n"
+            + runtimeRecords.map(r => headers.map(h => `"${r[h] || ''}"`).join(",")).join("\n");
+            
+        let encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", dynamicFileName); // Injects your dynamic LogD_DateTime name
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Step 4: Clear the data cache memory immediately after the download triggers
+        runtimeRecords = [];
+        localStorage.removeItem('forestry_batch_data');
+        
+        // Reset metrics and clean up interface tracking containers
+        document.getElementById('entryCounter').innerHTML = "Total Records: 0";
+        document.getElementById('dataPreview').value = "";
+        
+        // Reset the form index values back to 1 for the next session
+        applyAutoIncrements();
+        
+        // Subtle confirmation notice to the user that memory has been wiped
+        setTimeout(function() {
+            alert("🧹 Batch exported and temporary cache memory successfully cleared!");
+        }, 300);
+    };
+
+</script>
+</body>
+</html>
